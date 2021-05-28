@@ -1,9 +1,9 @@
 import Grid from "@material-ui/core/Grid";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement } from "react";
 import { useProductApi } from "../shared/ProductsApi";
 import Product from "../types/Product";
 import LoadingSpinner from "./LoadingSpinner";
-import ProductDetail from "./ProductDetail";
+import ProductListItem from "./ProductListItem";
 
 function ProductList(): ReactElement {
   const [products] = useProductApi<Product[]>("get", "products");
@@ -12,7 +12,7 @@ function ProductList(): ReactElement {
   return (
     <>
       {products.map((product) => (
-        <ProductDetail product={product} key={product.id} />
+        <ProductListItem product={product} key={product.id} />
       ))}
     </>
   );

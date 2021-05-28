@@ -5,6 +5,8 @@ import Paper from "@material-ui/core/Paper";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Product from "../types/Product";
+import LoadingSpinner from "./LoadingSpinner";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,9 +38,20 @@ interface Props {
 function ProductDetail(props: Props) {
   const classes = useStyles();
   const product = props.product;
+
+  const history = useHistory();
+  if (!product) return <LoadingSpinner />;
+
+  const goToDetails = () => {
+    history.push(`/products/${product.id}`);
+  };
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Paper
+        onClick={goToDetails}
+        className={classes.paper}
+        style={{ cursor: "pointer" }}
+      >
         <Grid container spacing={2}>
           <Grid item>
             <ButtonBase className={classes.image}>

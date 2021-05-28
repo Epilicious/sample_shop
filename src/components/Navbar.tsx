@@ -10,7 +10,8 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useStore } from "../Store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,13 +26,19 @@ const useStyles = makeStyles((theme) => ({
   appbar: {
     backgroundColor: "black",
   },
+  cart: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 function Navbar(): ReactElement {
   const classes = useStyles();
 
+  const { store } = useStore();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const open = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleClick = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
@@ -39,6 +46,10 @@ function Navbar(): ReactElement {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const goToCart = () => {
+    history.push("/cart");
   };
   return (
     <div className={classes.root}>
@@ -71,7 +82,8 @@ function Navbar(): ReactElement {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          <Button color="inherit">
+          <Button color="inherit" className={classes.cart} onClick={goToCart}>
+            <span>{store.cart.length}</span>
             <ShoppingCartIcon />
           </Button>
         </Toolbar>
