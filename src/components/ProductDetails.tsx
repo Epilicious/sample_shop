@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useProductApi } from "../shared/ProductsApi";
 import Product from "../types/Product";
@@ -11,7 +11,7 @@ import { Button, Paper } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useStore } from "../Store";
 
-function ProductDetails() {
+function ProductDetails(): ReactElement {
   const { id } = useParams<{ id: string }>();
   const [product] = useProductApi<Product>("get", `products/${id}`);
   const { store, dispatch } = useStore();

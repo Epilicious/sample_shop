@@ -26,7 +26,12 @@ interface RemoveFromCart {
   product: Product;
 }
 
-type Actions = AddToCart | RemoveFromCart;
+interface DeleteFromCart {
+  type: "DELETE_FROM_CART";
+  product: Product;
+}
+
+type Actions = AddToCart | RemoveFromCart | DeleteFromCart;
 
 export function reducer(store: Store, action: Actions): Store {
   switch (action.type) {
@@ -40,6 +45,12 @@ export function reducer(store: Store, action: Actions): Store {
         ...store,
         cart: store.cart.filter((_product, _index) => _index !== index),
       };
+    }
+    case "DELETE_FROM_CART": {
+      const filteredCart: Product[] = store.cart.filter(
+        (_product) => _product.id !== action.product.id
+      );
+      return { ...store, cart: [...filteredCart] };
     }
     default:
       return store;

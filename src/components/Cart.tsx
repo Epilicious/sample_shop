@@ -1,22 +1,47 @@
-import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
+import React, { ReactElement, SyntheticEvent } from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { Button, Paper } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Paper,
+  Typography,
+  Theme,
+  createStyles,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { useStore } from "../Store";
 import Product from "../types/Product";
+import { Link, useHistory } from "react-router-dom";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      cursor: "pointer",
+    },
+    sum: {
+      display: "flex",
+      alignSelf: "flex-end",
+      justifyContent: "flex-end",
+    },
+    cartSum: {
+      fontWeight: "bold",
+      fontSize: "3vh",
+      marginTop: "1vh",
+    },
+  })
+);
 
 const paperStyle = {
   display: "flex",
   marginTop: "2vh",
 };
-export default function Cart() {
+export default function Cart(): ReactElement {
+  const classes = useStyles();
   const { store, dispatch } = useStore();
+  const history = useHistory();
 
   const products = store.cart
     .reduce((acc: Product[], product) => {
@@ -28,15 +53,24 @@ export default function Cart() {
   const productCount = (product: Product) =>
     store.cart.filter((_product) => _product.id === product.id).length;
 
-  const onAddOne = (product: Product) => {
+  const onAddOne = (e: SyntheticEvent, product: Product) => {
+    e.stopPropagation();
     dispatch({ type: "ADD_TO_CART", product });
   };
 
-  const onRemoveOne = (product: Product) => {
+  const onRemoveOne = (e: SyntheticEvent, product: Product) => {
+    e.stopPropagation();
     dispatch({ type: "REMOVE_FROM_CART", product });
   };
 
-  //reduce fn
+  const onDelete = (e: SyntheticEvent, product: Product) => {
+    e.stopPropagation();
+    dispatch({ type: "DELETE_FROM_CART", product });
+  };
+
+  const goToDetails = (product: Product) => {
+    history.push(`/products/${product.id}`);
+  };
 
   const sumUp = (acc: number, product: Product) => acc + Number(product.price);
 
@@ -45,7 +79,13 @@ export default function Cart() {
   return (
     <Container maxWidth="lg">
       {products.map((product) => (
-        <Grid container spacing={2} key={product.id}>
+        <Grid
+          container
+          spacing={2}
+          key={product.id}
+          onClick={() => goToDetails(product)}
+          className={classes.root}
+        >
           <Grid item xs={12}>
             <Paper style={paperStyle}>
               <img
@@ -62,28 +102,39 @@ export default function Cart() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => onAddOne(product)}
+                  onClick={(e) => onAddOne(e, product)}
                 >
                   <AddIcon />
                 </Button>
-                <div>{productCount(product)}</div>
+                <Typography>{productCount(product)}</Typography>
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => onRemoveOne(product)}
+                  onClick={(e) => onRemoveOne(e, product)}
                 >
                   <RemoveIcon />
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={(e) => onDelete(e, product)}
+                >
+                  <DeleteForeverIcon />
                 </Button>
               </Grid>
             </Paper>
           </Grid>
         </Grid>
       ))}
-      <Grid container>
-        <span>{`Sum(${store.cart.length} Articles): ${totalSum.toFixed(
-          2
-        )} €`}</span>
-      </Grid>
+      {store.cart.length ? (
+        <Grid container spacing={0} className={classes.sum}>
+          <span className={classes.cartSum}>{`Sum(${
+            store.cart.length
+          } Articles): ${totalSum.toFixed(2)} €`}</span>
+        </Grid>
+      ) : (
+        <h2>No Items in the cart</h2>
+      )}
     </Container>
   );
 }

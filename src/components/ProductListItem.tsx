@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -35,7 +35,7 @@ interface Props {
   product: Product;
 }
 
-function ProductDetail(props: Props) {
+function ProductDetail(props: Props): ReactElement {
   const classes = useStyles();
   const product = props.product;
 

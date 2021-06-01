@@ -75,8 +75,11 @@ function Navbar(): ReactElement {
             <Link to="/home">
               <MenuItem onClick={handleClose}>Home</MenuItem>
             </Link>
-            <Link to="/products">
+            <Link to="/products/page/1">
               <MenuItem onClick={handleClose}>Products</MenuItem>
+            </Link>
+            <Link to="/contact">
+              <MenuItem onClick={handleClose}>Contact</MenuItem>
             </Link>
           </Menu>
           <Typography variant="h6" className={classes.title}>

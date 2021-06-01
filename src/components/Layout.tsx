@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import Header from "./Header";
 
-function Layout(props: { children: ReactElement }) {
+function Layout(props: { children: ReactElement }): ReactElement {
   return (
     <>
       <Header />
