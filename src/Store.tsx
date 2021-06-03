@@ -4,6 +4,7 @@ import React, {
   Dispatch,
   ReactElement,
   useContext,
+  useEffect,
   useReducer,
 } from "react";
 import Product from "./types/Product";
@@ -30,13 +31,20 @@ interface DeleteFromCart {
   type: "DELETE_FROM_CART";
   product: Product;
 }
-
-type Actions = AddToCart | RemoveFromCart | DeleteFromCart;
+interface GetLocalStorage {
+  type: "GET_LOCALSTORAGE";
+}
+export type Actions =
+  | AddToCart
+  | RemoveFromCart
+  | DeleteFromCart
+  | GetLocalStorage;
 
 export function reducer(store: Store, action: Actions): Store {
   switch (action.type) {
-    case "ADD_TO_CART":
+    case "ADD_TO_CART": {
       return { ...store, cart: [...store.cart, action.product] };
+    }
     case "REMOVE_FROM_CART": {
       const index = store.cart
         .map((product) => product.id)
@@ -51,6 +59,9 @@ export function reducer(store: Store, action: Actions): Store {
         (_product) => _product.id !== action.product.id
       );
       return { ...store, cart: [...filteredCart] };
+    }
+    case "GET_LOCALSTORAGE": {
+      return JSON.parse(localStorage.getItem("store") || "{}");
     }
     default:
       return store;
@@ -68,6 +79,9 @@ export const useStore = (): StoreContext => useContext(StoreContext);
 
 export function StoreProvider(props: { children: ReactElement }): ReactElement {
   const [store, dispatch] = useReducer(reducer, initialStore);
+  useEffect(() => {
+    localStorage.setItem("store", JSON.stringify(store));
+  }, [store]);
   return (
     <StoreContext.Provider value={{ store, dispatch }}>
       {props.children}

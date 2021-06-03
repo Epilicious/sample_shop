@@ -1,0 +1,26 @@
+.slick-prev,
+.slick-next {
+  background-color: black;
+  z-index: 1;
+}
+
+.slick-track {
+  background-color: rgb(37, 36, 36);
+}
+
+.slick-prev {
+  left: 0;
+}
+
+.slick-next {
+  right: 0;
+}
+.images {
+  width: 20vw;
+}
+
+.img-container {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}

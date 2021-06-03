@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) =>
       "& > *": {
         marginTop: theme.spacing(2),
       },
+      display: "flex",
+      justifyContent: "center",
     },
   })
 );
@@ -35,7 +37,9 @@ export default function BasicPagination(props: Props): ReactElement {
       <Pagination
         count={pageNumbers.length}
         page={props.currentPage}
-        onChange={(event, page) => props.onChange(event, page)}
+        onChange={(event: React.ChangeEvent<unknown>, page: number) =>
+          props.onChange(event, page)
+        }
       />
     </div>
   );

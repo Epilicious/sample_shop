@@ -1,7 +1,8 @@
 import React, { ReactElement } from "react";
+import LazyLoad from "./LazyLoad";
 
 function Home(): ReactElement {
-  return <div>Home</div>;
+  return <LazyLoad />;
 }
 
 export default Home;

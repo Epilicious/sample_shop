@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import BasicPagination from "./BasicPagination";
 import Cart from "./Cart";
 import Contact from "./Contact";
@@ -27,6 +27,9 @@ function Routes(): ReactElement {
       </Route>
       <Route path="/home">
         <Home />
+      </Route>
+      <Route exact path="/">
+        <Redirect to="/home" />
       </Route>
     </Switch>
   );

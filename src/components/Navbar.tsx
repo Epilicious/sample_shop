@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
 import { Link, useHistory } from "react-router-dom";
 import { useStore } from "../Store";
+import ProductSearch from "./ProductSearch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,9 +83,8 @@ function Navbar(): ReactElement {
               <MenuItem onClick={handleClose}>Contact</MenuItem>
             </Link>
           </Menu>
-          <Typography variant="h6" className={classes.title}>
-            News
-          </Typography>
+          <Typography variant="h6" className={classes.title}></Typography>
+          <ProductSearch />
           <Button color="inherit" className={classes.cart} onClick={goToCart}>
             <span>{store.cart.length}</span>
             <ShoppingCartIcon />

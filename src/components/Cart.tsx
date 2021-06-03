@@ -15,6 +15,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { useStore } from "../Store";
 import Product from "../types/Product";
 import { Link, useHistory } from "react-router-dom";
+import { useCart } from "../utils/useCart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,16 +32,17 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "3vh",
       marginTop: "1vh",
     },
+    paperStyle: {
+      display: "flex",
+      marginTop: "2vh",
+    },
   })
 );
 
-const paperStyle = {
-  display: "flex",
-  marginTop: "2vh",
-};
 export default function Cart(): ReactElement {
   const classes = useStyles();
-  const { store, dispatch } = useStore();
+  const { store } = useStore();
+  const { onAddOne, onRemoveOne, onDelete } = useCart();
   const history = useHistory();
 
   const products = store.cart
@@ -52,21 +54,6 @@ export default function Cart(): ReactElement {
 
   const productCount = (product: Product) =>
     store.cart.filter((_product) => _product.id === product.id).length;
-
-  const onAddOne = (e: SyntheticEvent, product: Product) => {
-    e.stopPropagation();
-    dispatch({ type: "ADD_TO_CART", product });
-  };
-
-  const onRemoveOne = (e: SyntheticEvent, product: Product) => {
-    e.stopPropagation();
-    dispatch({ type: "REMOVE_FROM_CART", product });
-  };
-
-  const onDelete = (e: SyntheticEvent, product: Product) => {
-    e.stopPropagation();
-    dispatch({ type: "DELETE_FROM_CART", product });
-  };
 
   const goToDetails = (product: Product) => {
     history.push(`/products/${product.id}`);
@@ -87,7 +74,7 @@ export default function Cart(): ReactElement {
           className={classes.root}
         >
           <Grid item xs={12}>
-            <Paper style={paperStyle}>
+            <Paper className={classes.paperStyle}>
               <img
                 src={product.image}
                 style={{ marginLeft: "1vw", width: "180px", height: "180px" }}

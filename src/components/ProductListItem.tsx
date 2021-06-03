@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, SyntheticEvent } from "react";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -7,11 +7,16 @@ import Typography from "@material-ui/core/Typography";
 import Product from "../types/Product";
 import LoadingSpinner from "./LoadingSpinner";
 import { useHistory } from "react-router";
+import { Button } from "@material-ui/core";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { useCart } from "../utils/useCart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      marginTop: "2vh",
+      marginBottom: "2vh",
     },
     paper: {
       padding: theme.spacing(2),
@@ -37,6 +42,7 @@ interface Props {
 
 function ProductDetail(props: Props): ReactElement {
   const classes = useStyles();
+  const { onAddOne } = useCart();
   const product = props.product;
 
   const history = useHistory();
@@ -45,6 +51,7 @@ function ProductDetail(props: Props): ReactElement {
   const goToDetails = () => {
     history.push(`/products/${product.id}`);
   };
+
   return (
     <div className={classes.root}>
       <Paper
@@ -73,7 +80,13 @@ function ProductDetail(props: Props): ReactElement {
               </Grid>
               <Grid item>
                 <Typography variant="body2" style={{ cursor: "pointer" }}>
-                  Remove
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => onAddOne(e, product)}
+                  >
+                    <ShoppingCartIcon /> Add To Cart
+                  </Button>
                 </Typography>
               </Grid>
             </Grid>
